@@ -1,0 +1,60 @@
+mode_capabilities:
+  observe:
+      allow_execution: false
+          allow_suggestions: false
+            suggest:
+                allow_execution: false
+                    allow_suggestions: true
+                      assist:
+                          allow_execution: true
+                              allowed_risk_levels: ["low"]
+                                autonomous:
+                                    allow_execution: true
+                                        allowed_risk_levels: ["low", "medium"]
+
+                                        allowed_actions:
+                                          open_url:
+                                              risk_level: "low"
+                                                  require_domain_allowlist: true
+                                                    copy_to_clipboard:
+                                                        risk_level: "low"
+                                                            require_domain_allowlist: false
+                                                              focus_window:
+                                                                  risk_level: "low"
+                                                                      require_domain_allowlist: false
+                                                                        click_element:
+                                                                            risk_level: "medium"
+                                                                                require_domain_allowlist: false
+
+                                                                                blocked_actions:
+                                                                                  - "submit_form"
+                                                                                    - "delete_file"
+                                                                                      - "execute_shell"
+                                                                                        - "send_email"
+                                                                                          - "purchase"
+                                                                                            - "account_setting_change"
+
+                                                                                            domain_allowlist:
+                                                                                              - "github"
+                                                                                                - "google"
+                                                                                                  - "figma"
+                                                                                                    - "notion"
+                                                                                                      - "linear"
+                                                                                                        - "wikipedia"
+                                                                                                        
+                                                                                                        domain_blocklist:
+                                                                                                          - "tinyurl"
+                                                                                                          
+                                                                                                          app_allowlist:
+                                                                                                            - "Zoom.exe"
+                                                                                                              - "ms-teams.exe"
+                                                                                                                - "Teams.exe"
+                                                                                                                  - "chrome.exe"
+                                                                                                                    - "msedge.exe"
+                                                                                                                      - "firefox.exe"
+                                                                                                                      
+                                                                                                                      security:
+                                                                                                                        min_confidence: 0.80
+                                                                                                                          max_target_age_ms: 2500
+                                                                                                                            block_urls_from_screen_share_region: true
+                                                                                                                              deduplicate_window_seconds: 120

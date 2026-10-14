@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meet-agent"
+version = "1.0.0"
+description = "M.E.E.T. — Local Third-Person Meeting Observer & Action Agent for Windows"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.5.3",
+        "PyYAML>=6.0.1",
+            "mss>=9.0.1",
+                "numpy>=1.26.4",
+                    "Pillow>=10.2.0",
+                        "fastapi>=0.104.1",
+                            "uvicorn>=0.24.0.post1",
+                                "requests>=2.31.0",
+                                ]
+
+                                [project.optional-dependencies]
+                                dev = ["pytest>=7.4.0", "httpx>=0.25.0"]
+                                windows = ["comtypes>=1.4.9", "pystray>=0.19.5", "pywebview>=5.0", "winotify>=1.1.0", "paddleocr>=2.7.0.3"]
+
+                                [project.scripts]
+                                meet-agent = "app.main:main"

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>M.E.E.T. — Windows Meeting Observer HUD</title>
+    <style>
+          :root { --bg: #0f172a; --panel: #1e293b; --border: #334155; --text: #f8fafc; --accent: #38bdf8; --danger: #ef4444; }
+          * { box-sizing: border-box; font-family: "Segoe UI", system-ui, sans-serif; }
+          body { margin: 0; background: var(--bg); color: var(--text); padding: 20px; }
+          header { display: flex; justify-content: space-between; align-items: center; background: var(--panel); padding: 16px 20px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; }
+          .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #0284c7; color: white; text-transform: uppercase; }
+          .btn-stop { background: var(--danger); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+          .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+          h2 { margin-top: 0; font-size: 16px; color: var(--accent); }
+          .mode-group button { background: #0f172a; color: var(--text); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; margin-right: 6px; cursor: pointer; }
+          .event-row { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+          input[type="text"] { width: 72%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: #0f172a; color: var(--text); }
+        </style>
+  </head>
+  <body>
+      <header>
+            <div>
+                    <strong style="font-size: 18px;">M.E.E.T. — Local Third-Person Meeting Agent</strong>strong>
+                    <span id="mode-badge" class="badge" style="margin-left: 10px;">OBSERVE</span>span>
+            </div>
+            <button class="btn-stop" onclick="triggerEmergencyStop()">EMERGENCY STOP (Ctrl+Alt+Shift+M)</button>button>
+      </header>
+      <div class="grid">
+            <div class="card">
+                    <h2>Operating Mode & Rule Compiler</h2>
+                  <div class="mode-group" style="margin-bottom: 16px;">
+                          <button onclick="setMode('observe')">Observe</button>button>
+                          <button onclick="setMode('suggest')">Suggest</button>button>
+                          <button onclick="setMode('assist')">Assist</button>button>
+                          <button onclick="setMode('autonomous')">Autonomous</button>button>
+                  </div>
+                  <div>
+                          <input id="rule-input" type="text" placeholder="e.g., Open links posted in chat" />
+                          <button onclick="compileRule()" style="padding:8px 12px;">Add Rule</button>button>
+                  </div>
+            </div>
+          <div class="card">
+                <h2>Live Meeting Event Stream</h2>
+                <div id="events-list">Waiting for meeting window...</div>
+          </div>
+      </div>
+    <script>
+          const TOKEN = "__MEET_SESSION_TOKEN__";
+          const headers = { "Content-Type": "application/json", "X-MEET-Token": TOKEN };
+          async function refresh() {
+                  const st = await fetch("/status", { headers }).then(r => r.json());
+                  document.getElementById("mode-badge").textContent = st.mode;
+                  const ev = await fetch("/events?limit=15", { headers }).then(r => r.json());
+                  document.getElementById("events-list").innerHTML = ev.events.map(e =>
+                            `<div class="event-row"><strong>[${e.event_type}]</strong> (${e.source_region}) — ${JSON.stringify(e.payload)}</div>`
+                                                                                         ).join("") || "No events recorded yet.";
+          }
+          async function setMode(mode) { await fetch("/mode", { method: "POST", headers, body: JSON.stringify({ mode }) }); refresh(); }
+          async function triggerEmergencyStop() { await fetch("/emergency-stop", { method: "POST", headers }); refresh(); }
+          async function compileRule() {
+                  const instruction = document.getElementById("rule-input").value;
+                  await fetch("/rules/compile", { method: "POST", headers, body: JSON.stringify({ instruction }) });
+                  document.getElementById("rule-input").value = "";
+                  refresh();
+          }
+          setInterval(refresh, 1500);
+          refresh();
+    </script>
+  </body>
+</html</html>>htl>
+    

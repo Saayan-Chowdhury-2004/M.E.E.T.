@@ -1,0 +1,18 @@
+rules:
+  - id: "rule_open_allowlisted_chat_links"
+      name: "Open allowlisted links posted in meeting chat"
+          enabled: true
+              event_type: "NEW_URL"
+                  source_region: "chat_sidebar"
+                      action_type: "open_url"
+                          require_allowlisted_domain: true
+                              description: "Automatically opens verified allowlisted URLs shared in the meeting chat sidebar."
+
+                                - id: "rule_log_all_meeting_urls"
+                                    name: "Log all URLs shared anywhere in meeting"
+                                        enabled: true
+                                            event_type: "NEW_URL"
+                                                source_region: "*"
+                                                    action_type: "none"
+                                                        require_allowlisted_domain: false
+                                                            description: "Captures every detected URL in the structured event log without acting on unknown domains."

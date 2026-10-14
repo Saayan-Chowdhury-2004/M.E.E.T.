@@ -1,0 +1,76 @@
+agent:
+  name: "M.E.E.T."
+    default_mode: "observe"
+      poll_interval_ms: 250
+        standby_poll_interval_ms: 2000
+          kill_switch_hotkey: "Ctrl+Alt+Shift+M"
+            max_action_retries: 1
+
+            capture:
+              backend: "auto"
+                ring_buffer_seconds: 60
+                  max_fps: 4
+                    dpi_awareness: "per_monitor_v2"
+
+                    meeting_gating:
+                      enabled: true
+                        process_names:
+                            - "Zoom.exe"
+                                - "ms-teams.exe"
+                                    - "Teams.exe"
+                                        - "CiscoCollabHost.exe"
+                                            - "chrome.exe"
+                                                - "msedge.exe"
+                                                    - "firefox.exe"
+                                                      title_patterns:
+                                                          - "Zoom Meeting"
+                                                              - "Microsoft Teams"
+                                                                  - "Meet -"
+                                                                      - "Google Meet"
+                                                                          - "Webex"
+
+                                                                          regions:
+                                                                            dynamic_uia_anchoring: true
+                                                                              pixel_change_threshold: 12
+                                                                                dirty_pixel_ratio_trigger: 0.008
+                                                                                  video_motion_ceiling_ratio: 0.45
+                                                                                    fallback_rois:
+                                                                                        chat_sidebar:
+                                                                                              x_ratio: 0.72
+                                                                                                    y_ratio: 0.08
+                                                                                                          w_ratio: 0.28
+                                                                                                                h_ratio: 0.84
+                                                                                                                    meeting_Banner:
+                                                                                                                          x_ratio: 0.15
+                                                                                                                                y_ratio: 0.75
+                                                                                                                                      w_ratio: 0.55
+                                                                                                                                            h_ratio: 0.20
+                                                                                                                                            
+                                                                                                                                            ocr:
+                                                                                                                                              tier_order: ["uia_text", "winrt_ocr", "paddle_ocr", "fallback"]
+                                                                                                                                                max_cpu_threads: 2
+                                                                                                                                                  language: "en-US"
+                                                                                                                                                  
+                                                                                                                                                  vlm:
+                                                                                                                                                    enabled: false
+                                                                                                                                                      provider: "ollama"
+                                                                                                                                                        host: "localhost"
+                                                                                                                                                          port: 11434
+                                                                                                                                                            model: "gemma4:latest"
+                                                                                                                                                              fallback_models: ["qwen3-vl:latest"]
+                                                                                                                                                                timeout_seconds: 4.0
+                                                                                                                                                                
+                                                                                                                                                                automation:
+                                                                                                                                                                  enabled: false
+                                                                                                                                                                    prefer_shell_execute_for_urls: true
+                                                                                                                                                                      verify_post_action: true
+                                                                                                                                                                      
+                                                                                                                                                                      api:
+                                                                                                                                                                        host: "localhost"
+                                                                                                                                                                          port: 8765
+                                                                                                                                                                            require_session_token: true
+                                                                                                                                                                            
+                                                                                                                                                                            windows_ux:
+                                                                                                                                                                              system_tray: true
+                                                                                                                                                                                toast_notifications: true
+                                                                                                                                                                                  native_webview_hud: true
